@@ -1,0 +1,215 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'q', '=save' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 warn package.json jsai-queuing@0.0.1 No description
+5 warn package.json jsai-queuing@0.0.1 No repository field.
+6 warn package.json jsai-queuing@0.0.1 No README data
+7 verbose readDependencies using package.json deps
+8 verbose cache add [ 'q', null ]
+9 verbose cache add name=undefined spec="q" args=["q",null]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: 'q',
+10 verbose parsed url   path: 'q',
+10 verbose parsed url   href: 'q' }
+11 verbose cache add [ '=save', null ]
+12 verbose cache add name=undefined spec="=save" args=["=save",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: '=save',
+13 verbose parsed url   path: '=save',
+13 verbose parsed url   href: '=save' }
+14 silly lockFile 22ea1c64-q q
+15 verbose lock q /Users/jean-sebastiencote/.npm/22ea1c64-q.lock
+16 silly lockFile 7c769873-save =save
+17 verbose lock =save /Users/jean-sebastiencote/.npm/7c769873-save.lock
+18 silly lockFile 22ea1c64-q q
+19 silly lockFile 22ea1c64-q q
+20 silly lockFile 7c769873-save =save
+21 silly lockFile 7c769873-save =save
+22 verbose addNamed [ 'q', '' ]
+23 verbose addNamed [ null, '*' ]
+24 silly lockFile f83edb5d-q q@
+25 verbose lock q@ /Users/jean-sebastiencote/.npm/f83edb5d-q.lock
+26 verbose addNamed [ '=save', '' ]
+27 verbose addNamed [ null, '*' ]
+28 silly lockFile 5b380027-save =save@
+29 verbose lock =save@ /Users/jean-sebastiencote/.npm/5b380027-save.lock
+30 silly addNameRange { name: 'q', range: '*', hasData: false }
+31 silly addNameRange { name: '=save', range: '*', hasData: false }
+32 verbose request where is /=save
+33 verbose request registry https://registry.npmjs.org/
+34 verbose request id 5dcad0134dcf69a3
+35 verbose url raw /=save
+36 verbose url resolving [ 'https://registry.npmjs.org/', './%3Dsave' ]
+37 verbose url resolved https://registry.npmjs.org/%3Dsave
+38 verbose request where is https://registry.npmjs.org/%3Dsave
+39 info trying registry request attempt 1 at 16:10:14
+40 http GET https://registry.npmjs.org/%3Dsave
+41 verbose request where is /q
+42 verbose request registry https://registry.npmjs.org/
+43 verbose url raw /q
+44 verbose url resolving [ 'https://registry.npmjs.org/', './q' ]
+45 verbose url resolved https://registry.npmjs.org/q
+46 verbose request where is https://registry.npmjs.org/q
+47 info trying registry request attempt 1 at 16:10:14
+48 verbose etag "16XK3GB8MKMJUEMH4MJ01AKDV"
+49 http GET https://registry.npmjs.org/q
+50 http 404 https://registry.npmjs.org/%3Dsave
+51 verbose headers { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
+51 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+51 verbose headers   'content-type': 'application/json',
+51 verbose headers   'cache-control': 'max-age=0',
+51 verbose headers   'content-length': '52',
+51 verbose headers   'accept-ranges': 'bytes',
+51 verbose headers   via: '1.1 varnish',
+51 verbose headers   age: '0',
+51 verbose headers   'x-served-by': 'cache-sjc3123-SJC',
+51 verbose headers   'x-cache': 'MISS',
+51 verbose headers   'x-cache-hits': '0',
+51 verbose headers   'x-timer': 'S1419120614.516737,VS0,VE39',
+51 verbose headers   'keep-alive': 'timeout=10, max=50',
+51 verbose headers   connection: 'Keep-Alive' }
+52 silly registry.get cb [ 404,
+52 silly registry.get   { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
+52 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+52 silly registry.get     'content-type': 'application/json',
+52 silly registry.get     'cache-control': 'max-age=0',
+52 silly registry.get     'content-length': '52',
+52 silly registry.get     'accept-ranges': 'bytes',
+52 silly registry.get     via: '1.1 varnish',
+52 silly registry.get     age: '0',
+52 silly registry.get     'x-served-by': 'cache-sjc3123-SJC',
+52 silly registry.get     'x-cache': 'MISS',
+52 silly registry.get     'x-cache-hits': '0',
+52 silly registry.get     'x-timer': 'S1419120614.516737,VS0,VE39',
+52 silly registry.get     'keep-alive': 'timeout=10, max=50',
+52 silly registry.get     connection: 'Keep-Alive' } ]
+53 silly lockFile 5b380027-save =save@
+54 silly lockFile 5b380027-save =save@
+55 http 200 https://registry.npmjs.org/q
+56 silly registry.get cb [ 200,
+56 silly registry.get   { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
+56 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+56 silly registry.get     etag: '"E5OUNCSN2SEMHLX8BRGR3VJGM"',
+56 silly registry.get     'content-type': 'application/json',
+56 silly registry.get     'cache-control': 'max-age=60',
+56 silly registry.get     'content-length': '131105',
+56 silly registry.get     'accept-ranges': 'bytes',
+56 silly registry.get     via: '1.1 varnish',
+56 silly registry.get     age: '52',
+56 silly registry.get     'x-served-by': 'cache-sjc3121-SJC',
+56 silly registry.get     'x-cache': 'HIT',
+56 silly registry.get     'x-cache-hits': '1',
+56 silly registry.get     'x-timer': 'S1419120614.510606,VS0,VE0',
+56 silly registry.get     vary: 'Accept',
+56 silly registry.get     'keep-alive': 'timeout=10, max=50',
+56 silly registry.get     connection: 'Keep-Alive' } ]
+57 silly addNameRange number 2 { name: 'q', range: '*', hasData: true }
+58 silly addNameRange versions [ 'q',
+58 silly addNameRange   [ '0.0.0',
+58 silly addNameRange     '0.0.1',
+58 silly addNameRange     '0.0.2',
+58 silly addNameRange     '0.0.3',
+58 silly addNameRange     '0.1.0',
+58 silly addNameRange     '0.1.1',
+58 silly addNameRange     '0.1.2',
+58 silly addNameRange     '0.1.3',
+58 silly addNameRange     '0.1.4',
+58 silly addNameRange     '0.1.5',
+58 silly addNameRange     '0.1.6',
+58 silly addNameRange     '0.1.7',
+58 silly addNameRange     '0.1.8',
+58 silly addNameRange     '0.1.9',
+58 silly addNameRange     '0.2.0-rc1',
+58 silly addNameRange     '0.2.0',
+58 silly addNameRange     '0.2.1',
+58 silly addNameRange     '0.2.2',
+58 silly addNameRange     '0.2.3',
+58 silly addNameRange     '0.2.4',
+58 silly addNameRange     '0.2.5',
+58 silly addNameRange     '0.2.6',
+58 silly addNameRange     '0.2.7',
+58 silly addNameRange     '0.2.8',
+58 silly addNameRange     '0.2.9',
+58 silly addNameRange     '0.3.0',
+58 silly addNameRange     '0.2.10',
+58 silly addNameRange     '0.4.0',
+58 silly addNameRange     '0.4.1',
+58 silly addNameRange     '0.4.2',
+58 silly addNameRange     '0.4.4',
+58 silly addNameRange     '0.5.0',
+58 silly addNameRange     '0.5.1',
+58 silly addNameRange     '0.5.2',
+58 silly addNameRange     '0.5.3',
+58 silly addNameRange     '0.6.0',
+58 silly addNameRange     '0.7.0',
+58 silly addNameRange     '0.7.1',
+58 silly addNameRange     '0.7.2',
+58 silly addNameRange     '0.8.0',
+58 silly addNameRange     '0.8.1',
+58 silly addNameRange     '0.8.2',
+58 silly addNameRange     '0.8.3',
+58 silly addNameRange     '0.8.4',
+58 silly addNameRange     '0.8.5',
+58 silly addNameRange     '0.8.6',
+58 silly addNameRange     '0.8.7',
+58 silly addNameRange     '0.8.8',
+58 silly addNameRange     '0.8.9',
+58 silly addNameRange     '0.8.10',
+58 silly addNameRange     '0.8.11',
+58 silly addNameRange     '0.8.12',
+58 silly addNameRange     '0.9.0',
+58 silly addNameRange     '0.9.1',
+58 silly addNameRange     '0.9.2',
+58 silly addNameRange     '0.9.3',
+58 silly addNameRange     '0.9.4',
+58 silly addNameRange     '0.9.5',
+58 silly addNameRange     '0.9.6',
+58 silly addNameRange     '0.9.7',
+58 silly addNameRange     '1.0.0',
+58 silly addNameRange     '1.0.1',
+58 silly addNameRange     '2.0.0',
+58 silly addNameRange     '2.0.1',
+58 silly addNameRange     '2.0.2',
+58 silly addNameRange     '1.1.0',
+58 silly addNameRange     '1.1.1',
+58 silly addNameRange     '1.1.2' ] ]
+59 verbose addNamed [ 'q', '1.1.2' ]
+60 verbose addNamed [ '1.1.2', '1.1.2' ]
+61 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
+62 verbose lock q@1.1.2 /Users/jean-sebastiencote/.npm/e953b1ec-q-1-1-2.lock
+63 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
+64 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
+65 silly lockFile f83edb5d-q q@
+66 silly lockFile f83edb5d-q q@
+67 error 404 404 Not Found: %3Dsave
+67 error 404
+67 error 404 '%3Dsave' is not in the npm registry.
+67 error 404 You should bug the author to publish it
+67 error 404 It was specified as a dependency of 'jsai-queuing'
+67 error 404
+67 error 404 Note that you can also install from a
+67 error 404 tarball, folder, or http url, or git url.
+68 error System Darwin 14.0.0
+69 error command "node" "/usr/local/bin/npm" "install" "q" "=save"
+70 error cwd /Users/jean-sebastiencote/webstormprojects/queuing
+71 error node -v v0.10.33
+72 error npm -v 1.4.28
+73 error code E404
+74 verbose exit [ 1, true ]
