@@ -1,7 +1,7 @@
 /**
  * Created by jean-sebastiencote on 12/20/14.
  */
-(function (_, q, qu, jb, Buffer) {
+(function (_, q, qu, jb, Buffer, serviceMessage) {
 
     'use strict';
 
@@ -12,12 +12,32 @@
     }
 
     Queue.send = function (msgType, msg) {
-        if (channel[msgType]) {
 
-            var str = JSON.stringify(msg);
+        var response = new serviceMessage.ServiceResponse();
 
-            channel[msgType].channel.publish(msgType, channel[msgType].routingKey, new Buffer(str), {persistent: channel[msgType].persistent});
+        if (msg instanceof serviceMessage.ServiceMessage) {
+            response.correlationId = msg.correlationId;
         }
+
+        if (channel[msgType]) {
+            try {
+                var str = JSON.stringify(msg);
+
+                response.isSuccess = channel[msgType].channel.publish(msgType, channel[msgType].routingKey, new Buffer(str), {persistent: channel[msgType].persistent});
+                if (!response.isSuccess) {
+                    response.errors.push('The message could not be sent');
+                }
+            } catch(e) {
+                response.isSuccess = false;
+                response.errors.push('The message could not be sent due to an exception: ' + e.message + ' ', + e.stack);
+            }
+
+        } else {
+            response.isSuccess = false;
+            response.errors.push('There are no channels open for this message type');
+        }
+
+        return response;
     };
 
     Queue.listen = function (msgType, callback) {
@@ -95,7 +115,8 @@
     require('q'),
     require('amqplib'),
     require('json-buffer'),
-    require('buffer').Buffer
+    require('buffer').Buffer,
+    require('jsai-serviceMessage')
 );
 
 config = {
