@@ -27,9 +27,9 @@
                 if (!response.isSuccess) {
                     response.errors.push('The message could not be sent');
                 }
-            } catch(e) {
+            } catch (e) {
                 response.isSuccess = false;
-                response.errors.push('The message could not be sent due to an exception: ' + e.message + ' ', + e.stack);
+                response.errors.push('The message could not be sent due to an exception: ' + e.message + ' ', +e.stack);
             }
 
         } else {
@@ -40,9 +40,22 @@
         return response;
     };
 
-    Queue.listen = function (msgType, callback) {
+    function listen(parameters) {
+        var promises = parameters.promises;
+        if (!_.isUndefined(parameters.listener)) {
+            promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
+                console.log(msg);
+                var obj = JSON.parse(msg.content.toString());
+                if (_.isFunction(parameters.listener)) {
+                    q.when(parameters.listener(obj)).then(function (result) {
+                        channel[parameters.messageType].channel.ack(msg);
+                    });
+                } else if (_.isString(parameters.listener)) {
 
-    };
+                }
+            }));
+        }
+    }
 
     Queue.setup = function (config) {
 
@@ -59,7 +72,7 @@
 
                             channel[currentConfig.type] = {
                                 channel: ch,
-                                persistent: currentConfig.pattern == 'topic' ? true : false,
+                                persistent: currentConfig.pattern == 'topic',
                                 routingKey: currentConfig.pattern == 'topic' ? currentConfig.type : ''
                             };
 
@@ -67,24 +80,28 @@
                                 promises.push(ch.assertExchange(currentConfig.type, 'topic'));
                                 promises.push(ch.assertQueue(currentConfig.type));
                                 promises.push(ch.bindQueue(currentConfig.type, currentConfig.type, currentConfig.type));
-                                promises.push(ch.consume(currentConfig.type, function (msg) {
-                                    console.log(msg);
-                                    var obj = JSON.parse(msg.content.toString());
-                                    channel[currentConfig.type].channel.ack(msg);
-
-                                }));
+                                listen({
+                                    messageType: currentConfig.type,
+                                    listener: currentConfig.listener,
+                                    promises: promises,
+                                    channel: ch
+                                });
                             } else if (currentConfig.pattern == 'fanout') {
                                 promises.push(ch.assertExchange(currentConfig.type, 'fanout'));
-                                promises.push(ch.assertQueue('', {
-                                    durable: false,
-                                    autoDelete: true
-                                }).then(function (qq) {
-                                    ch.bindQueue(qq.name, currentConfig.type);
-                                    ch.consume(qq.name, function (msg) {
-                                        console.log(msg);
-                                        channel[currentConfig.type].channel.ack(msg);
-                                    });
-                                }));
+                                if (!_.isUndefined(currentConfig.listener)) {
+                                    promises.push(ch.assertQueue('', {
+                                        durable: false,
+                                        autoDelete: true
+                                    }).then(function (qq) {
+                                        ch.bindQueue(qq.name, currentConfig.type);
+                                        listen({
+                                            messageType: qq.name,
+                                            listener: currentConfig.listener,
+                                            promises: promises,
+                                            channel: ch
+                                        });
+                                    }));
+                                }
                             }
                         });
                     })(config.types[i]);
@@ -100,7 +117,6 @@
 
 
         }).then(function () {
-                console.log('are we done yet');
                 config.startupHandler();
             },
             console.warn);
@@ -118,15 +134,3 @@
     require('buffer').Buffer,
     require('jsai-serviceMessage')
 );
-
-config = {
-    connection: {url: '127.0.0.1'},
-    types: [
-        {
-            type: 'CustomerUpdate', pattern: 'topic', receiveHandler: function () {
-        }
-        },
-        {type: 'CustomerUpdated', pattern: 'fanout'},
-        {type: 'CustomerCreated', pattern: 'fanout'}
-    ]
-};

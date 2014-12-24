@@ -15,22 +15,24 @@ module.exports = {
 
         var p = queue.setup({
             connection: {url: 'amqp://127.0.0.1?heartbeat=10'},
-            startupHandler: function() {
+            startupHandler: function () {
                 queue.send('CustomerUpdate', {toto: 'hello'});
             },
             types: [
                 {
-                    type: 'CustomerUpdate', pattern: 'topic', receiveHandler: function () {
+                    type: 'CustomerUpdate', pattern: 'topic', listener: function (msg) {
+                    console.log("inner function");
+                    console.log(msg);
                 }
                 },
-                {type: 'CustomerUpdated', pattern: 'fanout'},
-                {type: 'CustomerCreated', pattern: 'fanout'}
+                {type: 'CustomerUpdated', pattern: 'fanout', listener: ''},
+                {type: 'CustomerCreated', pattern: 'fanout', listener: ''}
             ]
         });
 
         test.done();
     },
-    testSendMessage: function(test) {
+    testSendMessage: function (test) {
 
         var queue = require('../index.js');
 
