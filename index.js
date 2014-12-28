@@ -14,14 +14,21 @@
     Queue.send = function (msgType, msg) {
 
         var response = new serviceMessage.ServiceResponse();
+        var message = new serviceMessage.ServiceMessage();
 
         if (msg instanceof serviceMessage.ServiceMessage) {
             response.correlationId = msg.correlationId;
+            message.correlationId = msg.correlationId;
+            message.data = msg.data;
+        } else {
+            message.data = msg;
+            message.setCorrelationId();
         }
 
         if (channel[msgType]) {
             try {
-                var str = JSON.stringify(msg);
+                var str = JSON.stringify(message.toJSON());
+
 
                 response.isSuccess = channel[msgType].channel.publish(msgType, channel[msgType].routingKey, new Buffer(str), {persistent: channel[msgType].persistent});
                 if (!response.isSuccess) {
@@ -45,9 +52,13 @@
         if (!_.isUndefined(parameters.listener)) {
             promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
                 console.log(msg);
-                var obj = JSON.parse(msg.content.toString());
+                if(msg.content.length > 0) {
+                    var obj = JSON.parse(msg.content.toString());
+                    var message = new serviceMessage.ServiceMessage();
+                    message.fromJSON(obj);
+                }
                 if (_.isFunction(parameters.listener)) {
-                    q.when(parameters.listener(obj)).then(function (result) {
+                    q.when(parameters.listener(message)).then(function (result) {
                         channel[parameters.messageType].channel.ack(msg);
                     });
                 } else if (_.isString(parameters.listener)) {

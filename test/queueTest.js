@@ -31,7 +31,7 @@ module.exports = {
         });
 
         test.done();
-    },
+    }/*,
     testSendMessage: function (test) {
 
         var queue = require('../index.js');
@@ -39,5 +39,5 @@ module.exports = {
         queue.send('CustomerUpdate', {toto: 'hello'});
 
         test.done();
-    }
+    }*/
 };
