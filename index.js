@@ -1,7 +1,7 @@
 /**
  * Created by jean-sebastiencote on 12/20/14.
  */
-(function (_, q, qu, jb, Buffer, serviceMessage) {
+(function (_, q, qu, Buffer, serviceMessage) {
 
     'use strict';
 
@@ -141,7 +141,6 @@
     require('lodash'),
     require('q'),
     require('amqplib'),
-    require('json-buffer'),
     require('buffer').Buffer,
     require('jsai-serviceMessage')
 );
