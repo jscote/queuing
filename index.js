@@ -5,7 +5,8 @@
 
     'use strict';
 
-    var channel = {};
+    var channels = {};
+    var connected = false;
 
     function Queue(options) {
 
@@ -25,12 +26,12 @@
             message.setCorrelationId();
         }
 
-        if (channel[msgType]) {
+        if (channels[msgType]) {
             try {
                 var str = JSON.stringify(message.toJSON());
 
 
-                response.isSuccess = channel[msgType].channel.publish(msgType, channel[msgType].routingKey, new Buffer(str), {persistent: channel[msgType].persistent});
+                response.isSuccess = channels[msgType].channel.publish(msgType, channels[msgType].routingKey, new Buffer(str), {persistent: channels[msgType].persistent});
                 if (!response.isSuccess) {
                     response.errors.push('The message could not be sent');
                 }
@@ -52,14 +53,14 @@
         if (!_.isUndefined(parameters.listener)) {
             promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
                 console.log(msg);
-                if(msg.content.length > 0) {
+                if (msg.content.length > 0) {
                     var obj = JSON.parse(msg.content.toString());
                     var message = new serviceMessage.ServiceMessage();
                     message.fromJSON(obj);
                 }
                 if (_.isFunction(parameters.listener)) {
                     q.when(parameters.listener(message)).then(function (result) {
-                        channel[parameters.messageType].channel.ack(msg);
+                        channels[parameters.messageType].channel.ack(msg);
                     });
                 } else if (_.isString(parameters.listener)) {
 
@@ -68,9 +69,37 @@
         }
     }
 
-    Queue.setup = function (config) {
+    function handleError(err) {
+
+        console.log('disconnected');
+        console.log(err);
+
+        connected = false;
+
+        var interval = setInterval(function () {
+
+            console.log('attempting reconnection...');
+
+            configureQueues(channels.config).then(function () {
+                if (connected) {
+                    clearInterval(interval);
+                    console.log('reconnected');
+                }
+            });
+
+
+        }, 10000)
+
+    }
+
+    function configureQueues(config) {
+
+        var deferred = q.defer();
 
         qu.connect(config.connection.url).then(function (connection) {
+            connected = true;
+            connection.on('error', handleError);
+
             var dfd = q.defer();
             var promises = [];
             process.nextTick(function () {
@@ -81,7 +110,7 @@
                         promises.push(ok);
                         ok = ok.then(function (ch) {
 
-                            channel[currentConfig.type] = {
+                            channels[currentConfig.type] = {
                                 channel: ch,
                                 persistent: currentConfig.pattern == 'topic',
                                 routingKey: currentConfig.pattern == 'topic' ? currentConfig.type : ''
@@ -130,8 +159,21 @@
         }).then(function () {
                 config.startupHandler();
             },
-            console.warn);
+            console.warn).done(function () {
+                deferred.resolve();
+            }
+        );
 
+        return deferred.promise;
+    }
+
+    Queue.setup = function (config) {
+
+        if (_.isUndefined(config) || _.isNull(config)) return;
+
+        channels.config = config;
+
+        configureQueues(config);
 
     };
 
