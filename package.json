@@ -1,6 +1,6 @@
 {
   "name": "jsai-queuing",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description" : "A wrapper to configure and launch queuing",
   "dependencies": {
     "amqplib": "^0.3.0",

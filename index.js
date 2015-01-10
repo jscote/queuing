@@ -24,6 +24,7 @@
         } else {
             message.data = msg;
             message.setCorrelationId();
+            response.setCorrelationId();
         }
 
         if (channels[msgType]) {
@@ -163,7 +164,9 @@
 
 
         }).then(function () {
-                config.startupHandler();
+                if(config.startupHandler) {
+                    config.startupHandler(channels);
+                }
             },
             console.warn).done(function () {
                 deferred.resolve();
