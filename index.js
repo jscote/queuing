@@ -94,7 +94,13 @@
 
     function configureQueues(config) {
 
+
         var deferred = q.defer();
+
+        if(_.isUndefined(config) || _.isUndefined(config.connection)) {
+            deferred.resolve();
+            return deferred.promise;
+        }
 
         qu.connect(config.connection.url).then(function (connection) {
             connected = true;
