@@ -193,5 +193,5 @@
     require('q'),
     require('amqplib'),
     require('buffer').Buffer,
-    require('jsai-serviceMessage')
+    require('jsai-servicemessage')
 );
