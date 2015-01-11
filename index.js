@@ -24,7 +24,7 @@
         } else {
             message.data = msg;
             message.setCorrelationId();
-            response.setCorrelationId();
+            response.correlationId = message.correlationId;
         }
 
         if (channels[msgType]) {
