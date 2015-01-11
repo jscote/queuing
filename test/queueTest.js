@@ -14,7 +14,7 @@ module.exports = {
         var queue = require('../index.js');
 
         var p = queue.setup({
-            connection: {url: 'amqp://127.0.0.1?heartbeat=10'},
+            connection: {url: 'amqp://127.0.0.1?heartbeat=300'},
             startupHandler: function () {
                 queue.send('CustomerUpdate', {toto: 'hello'});
             },
@@ -23,6 +23,7 @@ module.exports = {
                     type: 'CustomerUpdate', pattern: 'topic', listener: function (msg) {
                     console.log("inner function");
                     console.log(msg);
+                    throw('test error');
                 }
                 },
                 {type: 'CustomerUpdated', pattern: 'fanout', listener: ''},

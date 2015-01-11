@@ -31,7 +31,6 @@
             try {
                 var str = JSON.stringify(message.toJSON());
 
-
                 response.isSuccess = channels[msgType].channel.publish(msgType, channels[msgType].routingKey, new Buffer(str), {persistent: channels[msgType].persistent});
                 if (!response.isSuccess) {
                     response.errors.push('The message could not be sent');
@@ -53,16 +52,27 @@
         var promises = parameters.promises;
         if (!_.isUndefined(parameters.listener)) {
             promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
-                console.log(msg);
                 if (msg.content.length > 0) {
                     var obj = JSON.parse(msg.content.toString());
                     var message = new serviceMessage.ServiceMessage();
                     message.fromJSON(obj);
                 }
                 if (_.isFunction(parameters.listener)) {
-                    q.when(parameters.listener(message)).then(function (result) {
+                    q.fcall(parameters.listener, message).then(function (result) {
+
+                        //TODO track completion of the message
+
                         channels[parameters.messageType].channel.ack(msg);
-                    });
+                    }).fail(function(error){
+
+                        //TODO track completion of the message in error
+
+                        //put the message in an error queue
+                        Queue.send('error', {error: error, originalMessage: msg, exchange: msg.fields.exchange, routingKey: msg.fields.routingKey});
+
+                        channels[parameters.messageType].channel.ack(msg);
+
+                    }).done();
                 } else if (_.isString(parameters.listener)) {
 
                 }
@@ -110,6 +120,17 @@
             var dfd = q.defer();
             var promises = [];
             process.nextTick(function () {
+
+                //create the error queue
+                var errorChannel = connection.createChannel();
+                promises.push(errorChannel);
+                errorChannel.then(function(ch) {
+                   channels['error'] = {channel: ch, persistent: true, routingKey: 'error'};
+                    promises.push(ch.assertExchange('error', 'topic'));
+                    promises.push(ch.assertQueue('errorQueue'));
+                    promises.push(ch.bindQueue('errorQueue', 'error', 'error'));
+                });
+
                 for (var i = 0; i < config.types.length; i++) {
 
                     (function iterate(currentConfig) {

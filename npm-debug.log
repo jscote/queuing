@@ -1,215 +1,107 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'q', '=save' ]
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
-4 warn package.json jsai-queuing@0.0.1 No description
-5 warn package.json jsai-queuing@0.0.1 No repository field.
-6 warn package.json jsai-queuing@0.0.1 No README data
-7 verbose readDependencies using package.json deps
-8 verbose cache add [ 'q', null ]
-9 verbose cache add name=undefined spec="q" args=["q",null]
-10 verbose parsed url { protocol: null,
-10 verbose parsed url   slashes: null,
-10 verbose parsed url   auth: null,
-10 verbose parsed url   host: null,
-10 verbose parsed url   port: null,
-10 verbose parsed url   hostname: null,
-10 verbose parsed url   hash: null,
-10 verbose parsed url   search: null,
-10 verbose parsed url   query: null,
-10 verbose parsed url   pathname: 'q',
-10 verbose parsed url   path: 'q',
-10 verbose parsed url   href: 'q' }
-11 verbose cache add [ '=save', null ]
-12 verbose cache add name=undefined spec="=save" args=["=save",null]
-13 verbose parsed url { protocol: null,
-13 verbose parsed url   slashes: null,
-13 verbose parsed url   auth: null,
-13 verbose parsed url   host: null,
-13 verbose parsed url   port: null,
-13 verbose parsed url   hostname: null,
-13 verbose parsed url   hash: null,
-13 verbose parsed url   search: null,
-13 verbose parsed url   query: null,
-13 verbose parsed url   pathname: '=save',
-13 verbose parsed url   path: '=save',
-13 verbose parsed url   href: '=save' }
-14 silly lockFile 22ea1c64-q q
-15 verbose lock q /Users/jean-sebastiencote/.npm/22ea1c64-q.lock
-16 silly lockFile 7c769873-save =save
-17 verbose lock =save /Users/jean-sebastiencote/.npm/7c769873-save.lock
-18 silly lockFile 22ea1c64-q q
-19 silly lockFile 22ea1c64-q q
-20 silly lockFile 7c769873-save =save
-21 silly lockFile 7c769873-save =save
-22 verbose addNamed [ 'q', '' ]
-23 verbose addNamed [ null, '*' ]
-24 silly lockFile f83edb5d-q q@
-25 verbose lock q@ /Users/jean-sebastiencote/.npm/f83edb5d-q.lock
-26 verbose addNamed [ '=save', '' ]
-27 verbose addNamed [ null, '*' ]
-28 silly lockFile 5b380027-save =save@
-29 verbose lock =save@ /Users/jean-sebastiencote/.npm/5b380027-save.lock
-30 silly addNameRange { name: 'q', range: '*', hasData: false }
-31 silly addNameRange { name: '=save', range: '*', hasData: false }
-32 verbose request where is /=save
-33 verbose request registry https://registry.npmjs.org/
-34 verbose request id 5dcad0134dcf69a3
-35 verbose url raw /=save
-36 verbose url resolving [ 'https://registry.npmjs.org/', './%3Dsave' ]
-37 verbose url resolved https://registry.npmjs.org/%3Dsave
-38 verbose request where is https://registry.npmjs.org/%3Dsave
-39 info trying registry request attempt 1 at 16:10:14
-40 http GET https://registry.npmjs.org/%3Dsave
-41 verbose request where is /q
-42 verbose request registry https://registry.npmjs.org/
-43 verbose url raw /q
-44 verbose url resolving [ 'https://registry.npmjs.org/', './q' ]
-45 verbose url resolved https://registry.npmjs.org/q
-46 verbose request where is https://registry.npmjs.org/q
-47 info trying registry request attempt 1 at 16:10:14
-48 verbose etag "16XK3GB8MKMJUEMH4MJ01AKDV"
-49 http GET https://registry.npmjs.org/q
-50 http 404 https://registry.npmjs.org/%3Dsave
-51 verbose headers { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
-51 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-51 verbose headers   'content-type': 'application/json',
-51 verbose headers   'cache-control': 'max-age=0',
-51 verbose headers   'content-length': '52',
-51 verbose headers   'accept-ranges': 'bytes',
-51 verbose headers   via: '1.1 varnish',
-51 verbose headers   age: '0',
-51 verbose headers   'x-served-by': 'cache-sjc3123-SJC',
-51 verbose headers   'x-cache': 'MISS',
-51 verbose headers   'x-cache-hits': '0',
-51 verbose headers   'x-timer': 'S1419120614.516737,VS0,VE39',
-51 verbose headers   'keep-alive': 'timeout=10, max=50',
-51 verbose headers   connection: 'Keep-Alive' }
-52 silly registry.get cb [ 404,
-52 silly registry.get   { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
-52 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-52 silly registry.get     'content-type': 'application/json',
-52 silly registry.get     'cache-control': 'max-age=0',
-52 silly registry.get     'content-length': '52',
-52 silly registry.get     'accept-ranges': 'bytes',
-52 silly registry.get     via: '1.1 varnish',
-52 silly registry.get     age: '0',
-52 silly registry.get     'x-served-by': 'cache-sjc3123-SJC',
-52 silly registry.get     'x-cache': 'MISS',
-52 silly registry.get     'x-cache-hits': '0',
-52 silly registry.get     'x-timer': 'S1419120614.516737,VS0,VE39',
-52 silly registry.get     'keep-alive': 'timeout=10, max=50',
-52 silly registry.get     connection: 'Keep-Alive' } ]
-53 silly lockFile 5b380027-save =save@
-54 silly lockFile 5b380027-save =save@
-55 http 200 https://registry.npmjs.org/q
-56 silly registry.get cb [ 200,
-56 silly registry.get   { date: 'Sun, 21 Dec 2014 00:10:14 GMT',
-56 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-56 silly registry.get     etag: '"E5OUNCSN2SEMHLX8BRGR3VJGM"',
-56 silly registry.get     'content-type': 'application/json',
-56 silly registry.get     'cache-control': 'max-age=60',
-56 silly registry.get     'content-length': '131105',
-56 silly registry.get     'accept-ranges': 'bytes',
-56 silly registry.get     via: '1.1 varnish',
-56 silly registry.get     age: '52',
-56 silly registry.get     'x-served-by': 'cache-sjc3121-SJC',
-56 silly registry.get     'x-cache': 'HIT',
-56 silly registry.get     'x-cache-hits': '1',
-56 silly registry.get     'x-timer': 'S1419120614.510606,VS0,VE0',
-56 silly registry.get     vary: 'Accept',
-56 silly registry.get     'keep-alive': 'timeout=10, max=50',
-56 silly registry.get     connection: 'Keep-Alive' } ]
-57 silly addNameRange number 2 { name: 'q', range: '*', hasData: true }
-58 silly addNameRange versions [ 'q',
-58 silly addNameRange   [ '0.0.0',
-58 silly addNameRange     '0.0.1',
-58 silly addNameRange     '0.0.2',
-58 silly addNameRange     '0.0.3',
-58 silly addNameRange     '0.1.0',
-58 silly addNameRange     '0.1.1',
-58 silly addNameRange     '0.1.2',
-58 silly addNameRange     '0.1.3',
-58 silly addNameRange     '0.1.4',
-58 silly addNameRange     '0.1.5',
-58 silly addNameRange     '0.1.6',
-58 silly addNameRange     '0.1.7',
-58 silly addNameRange     '0.1.8',
-58 silly addNameRange     '0.1.9',
-58 silly addNameRange     '0.2.0-rc1',
-58 silly addNameRange     '0.2.0',
-58 silly addNameRange     '0.2.1',
-58 silly addNameRange     '0.2.2',
-58 silly addNameRange     '0.2.3',
-58 silly addNameRange     '0.2.4',
-58 silly addNameRange     '0.2.5',
-58 silly addNameRange     '0.2.6',
-58 silly addNameRange     '0.2.7',
-58 silly addNameRange     '0.2.8',
-58 silly addNameRange     '0.2.9',
-58 silly addNameRange     '0.3.0',
-58 silly addNameRange     '0.2.10',
-58 silly addNameRange     '0.4.0',
-58 silly addNameRange     '0.4.1',
-58 silly addNameRange     '0.4.2',
-58 silly addNameRange     '0.4.4',
-58 silly addNameRange     '0.5.0',
-58 silly addNameRange     '0.5.1',
-58 silly addNameRange     '0.5.2',
-58 silly addNameRange     '0.5.3',
-58 silly addNameRange     '0.6.0',
-58 silly addNameRange     '0.7.0',
-58 silly addNameRange     '0.7.1',
-58 silly addNameRange     '0.7.2',
-58 silly addNameRange     '0.8.0',
-58 silly addNameRange     '0.8.1',
-58 silly addNameRange     '0.8.2',
-58 silly addNameRange     '0.8.3',
-58 silly addNameRange     '0.8.4',
-58 silly addNameRange     '0.8.5',
-58 silly addNameRange     '0.8.6',
-58 silly addNameRange     '0.8.7',
-58 silly addNameRange     '0.8.8',
-58 silly addNameRange     '0.8.9',
-58 silly addNameRange     '0.8.10',
-58 silly addNameRange     '0.8.11',
-58 silly addNameRange     '0.8.12',
-58 silly addNameRange     '0.9.0',
-58 silly addNameRange     '0.9.1',
-58 silly addNameRange     '0.9.2',
-58 silly addNameRange     '0.9.3',
-58 silly addNameRange     '0.9.4',
-58 silly addNameRange     '0.9.5',
-58 silly addNameRange     '0.9.6',
-58 silly addNameRange     '0.9.7',
-58 silly addNameRange     '1.0.0',
-58 silly addNameRange     '1.0.1',
-58 silly addNameRange     '2.0.0',
-58 silly addNameRange     '2.0.1',
-58 silly addNameRange     '2.0.2',
-58 silly addNameRange     '1.1.0',
-58 silly addNameRange     '1.1.1',
-58 silly addNameRange     '1.1.2' ] ]
-59 verbose addNamed [ 'q', '1.1.2' ]
-60 verbose addNamed [ '1.1.2', '1.1.2' ]
-61 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
-62 verbose lock q@1.1.2 /Users/jean-sebastiencote/.npm/e953b1ec-q-1-1-2.lock
-63 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
-64 silly lockFile e953b1ec-q-1-1-2 q@1.1.2
-65 silly lockFile f83edb5d-q q@
-66 silly lockFile f83edb5d-q q@
-67 error 404 404 Not Found: %3Dsave
-67 error 404
-67 error 404 '%3Dsave' is not in the npm registry.
-67 error 404 You should bug the author to publish it
-67 error 404 It was specified as a dependency of 'jsai-queuing'
-67 error 404
-67 error 404 Note that you can also install from a
-67 error 404 tarball, folder, or http url, or git url.
-68 error System Darwin 14.0.0
-69 error command "node" "/usr/local/bin/npm" "install" "q" "=save"
-70 error cwd /Users/jean-sebastiencote/webstormprojects/queuing
-71 error node -v v0.10.33
-72 error npm -v 1.4.28
-73 error code E404
-74 verbose exit [ 1, true ]
+4 verbose publish [ '.' ]
+5 verbose cache add [ '.', null ]
+6 verbose cache add name=undefined spec="." args=[".",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '.',
+7 verbose parsed url   path: '.',
+7 verbose parsed url   href: '.' }
+8 silly lockFile 3a52ce78- .
+9 verbose lock . /Users/jean-sebastiencote/.npm/3a52ce78-.lock
+10 verbose tar pack [ '/Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz',
+10 verbose tar pack   '.' ]
+11 verbose tarball /Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz
+12 verbose folder .
+13 info prepublish jsai-queuing@0.0.7
+14 silly lockFile 1f1177db-tar tar://.
+15 verbose lock tar://. /Users/jean-sebastiencote/.npm/1f1177db-tar.lock
+16 silly lockFile a18a05e9-m-jsai-queuing-0-0-7-package-tgz tar:///Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz
+17 verbose lock tar:///Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz /Users/jean-sebastiencote/.npm/a18a05e9-m-jsai-queuing-0-0-7-package-tgz.lock
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile a18a05e9-m-jsai-queuing-0-0-7-package-tgz tar:///Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz
+21 silly lockFile a18a05e9-m-jsai-queuing-0-0-7-package-tgz tar:///Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package.tgz
+22 silly lockFile 29978871-e-npm-jsai-queuing-0-0-7-package /Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package
+23 verbose lock /Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package /Users/jean-sebastiencote/.npm/29978871-e-npm-jsai-queuing-0-0-7-package.lock
+24 silly lockFile 29978871-e-npm-jsai-queuing-0-0-7-package /Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package
+25 silly lockFile 29978871-e-npm-jsai-queuing-0-0-7-package /Users/jean-sebastiencote/.npm/jsai-queuing/0.0.7/package
+26 silly lockFile 3a52ce78- .
+27 silly lockFile 3a52ce78- .
+28 silly publish { name: 'jsai-queuing',
+28 silly publish   version: '0.0.7',
+28 silly publish   description: 'A wrapper to configure and launch queuing',
+28 silly publish   dependencies:
+28 silly publish    { amqplib: '^0.3.0',
+28 silly publish      'jsai-servicemessage': '0.0.5',
+28 silly publish      lodash: '^2.4.1',
+28 silly publish      q: '^1.1.2' },
+28 silly publish   author:
+28 silly publish    { name: 'Jean-Sebastien Cote',
+28 silly publish      email: 'jean.sebastien.cote@gmail.com' },
+28 silly publish   repository: { type: 'git', url: 'git://github.com/jscote/queuing' },
+28 silly publish   engines: { node: '*' },
+28 silly publish   gitHead: '44aa1fa450176d4a8ad9f42584ee786d5c71b32b',
+28 silly publish   bugs: { url: 'https://github.com/jscote/queuing/issues' },
+28 silly publish   readme: 'ERROR: No README data found!',
+28 silly publish   homepage: 'https://github.com/jscote/queuing',
+28 silly publish   _id: 'jsai-queuing@0.0.7',
+28 silly publish   scripts: {},
+28 silly publish   _shasum: '52fd75034ad2b5a47a501a2c5b4ac46ac8f0f955',
+28 silly publish   _from: '.' }
+29 verbose request where is /jsai-queuing
+30 verbose request registry https://registry.npmjs.org/
+31 verbose request id 5e5f465245092ba5
+32 verbose url raw /jsai-queuing
+33 verbose url resolving [ 'https://registry.npmjs.org/', './jsai-queuing' ]
+34 verbose url resolved https://registry.npmjs.org/jsai-queuing
+35 verbose request where is https://registry.npmjs.org/jsai-queuing
+36 info trying registry request attempt 1 at 12:19:08
+37 http PUT https://registry.npmjs.org/jsai-queuing
+38 http 403 https://registry.npmjs.org/jsai-queuing
+39 verbose headers { date: 'Sat, 10 Jan 2015 20:19:08 GMT',
+39 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+39 verbose headers   'content-type': 'application/json',
+39 verbose headers   'cache-control': 'max-age=60',
+39 verbose headers   'content-length': '2233',
+39 verbose headers   'accept-ranges': 'bytes',
+39 verbose headers   via: '1.1 varnish',
+39 verbose headers   'x-served-by': 'cache-lax1435-LAX',
+39 verbose headers   'x-cache': 'MISS',
+39 verbose headers   'x-cache-hits': '0',
+39 verbose headers   'x-timer': 'S1420921148.643851,VS0,VE182',
+39 verbose headers   'keep-alive': 'timeout=10, max=50',
+39 verbose headers   connection: 'Keep-Alive' }
+40 error publish Failed PUT 403
+41 error Error: forbidden cannot modify pre-existing version: 0.0.7
+41 error old={"name":"jsai-queuing","version":"0.0.7","description":"A wrapper to configure and launch queuing","dependencies":{"amqplib":"^0.3.0","jsai-servicemessage":"0.0.4","lodash":"^2.4.1","q":"^1.1.2"},"author":{"name":"Jean-Sebastien Cote","email":"jean.sebastien.cote@gmail.com"},"repository":{"type":"git","url":"git://github.com/jscote/queuing"},"engines":{"node":"*"},"gitHead":"55423c1e2a8271ec3822b3c866f262d2eef587ee","bugs":{"url":"https://github.com/jscote/queuing/issues"},"homepage":"https://github.com/jscote/queuing","_id":"jsai-queuing@0.0.7","scripts":{},"_shasum":"ee8e97bb7baee15c05792fb979291d46f1cc66cd","_from":".","_npmVersion":"1.4.28","_npmUser":{"name":"jscote","email":"jean.sebastien.cote@gmail.com"},"maintainers":[{"name":"jscote","email":"jean.sebastien.cote@gmail.com"}],"dist":{"shasum":"ee8e97bb7baee15c05792fb979291d46f1cc66cd","tarball":"http://registry.npmjs.org/jsai-queuing/-/jsai-queuing-0.0.7.tgz"}}
+41 error new={"name":"jsai-queuing","version":"0.0.7","description":"A wrapper to configure and launch queuing","dependencies":{"amqplib":"^0.3.0","jsai-servicemessage":"0.0.5","lodash":"^2.4.1","q":"^1.1.2"},"author":{"name":"Jean-Sebastien Cote","email":"jean.sebastien.cote@gmail.com"},"repository":{"type":"git","url":"git://github.com/jscote/queuing"},"engines":{"node":"*"},"gitHead":"44aa1fa450176d4a8ad9f42584ee786d5c71b32b","bugs":{"url":"https://github.com/jscote/queuing/issues"},"readme":"ERROR: No README data found!","homepage":"https://github.com/jscote/queuing","_id":"jsai-queuing@0.0.7","scripts":{},"_shasum":"52fd75034ad2b5a47a501a2c5b4ac46ac8f0f955","_from":".","_npmVersion":"1.4.28","_npmUser":{"name":"jscote","email":"jean.sebastien.cote@gmail.com"},"maintainers":[{"name":"jscote","email":"jean.sebastien.cote@gmail.com"}],"dist":{"shasum":"52fd75034ad2b5a47a501a2c5b4ac46ac8f0f955","tarball":"http://registry.npmjs.org/jsai-queuing/-/jsai-queuing-0.0.7.tgz"}}: jsai-queuing
+41 error     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:308:14)
+41 error     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:246:65)
+41 error     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:236:22)
+41 error     at Request.emit (events.js:98:17)
+41 error     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1142:14)
+41 error     at Request.emit (events.js:117:20)
+41 error     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1096:12)
+41 error     at IncomingMessage.emit (events.js:117:20)
+41 error     at _stream_readable.js:943:16
+41 error     at process._tickCallback (node.js:419:13)
+42 error If you need help, you may report this *entire* log,
+42 error including the npm and node versions, at:
+42 error     <http://github.com/npm/npm/issues>
+43 error System Darwin 14.0.0
+44 error command "node" "/usr/local/bin/npm" "publish"
+45 error cwd /Users/jean-sebastiencote/webstormprojects/queuing
+46 error node -v v0.10.33
+47 error npm -v 1.4.28
+48 verbose exit [ 1, true ]
