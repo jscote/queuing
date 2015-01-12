@@ -48,33 +48,45 @@
         return response;
     };
 
+    function handleConsumeError(error, msg, parameters) {
+        //TODO track completion of the message in error
+
+        //put the message in an error queue
+        Queue.send('error', {
+            error: error,
+            originalMessage: msg,
+            exchange: msg.fields.exchange,
+            routingKey: msg.fields.routingKey
+        });
+
+        channels[parameters.messageType].channel.ack(msg);
+    }
+
     function listen(parameters) {
         var promises = parameters.promises;
         if (!_.isUndefined(parameters.listener)) {
             promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
-                if (msg.content.length > 0) {
-                    var obj = JSON.parse(msg.content.toString());
-                    var message = new serviceMessage.ServiceMessage();
-                    message.fromJSON(obj);
-                }
-                if (_.isFunction(parameters.listener)) {
-                    q.fcall(parameters.listener, message).then(function (result) {
+                try {
+                    if (msg.content.length > 0) {
+                        var obj = JSON.parse(msg.content.toString());
+                        var message = new serviceMessage.ServiceMessage();
+                        message.fromJSON(obj);
+                    }
+                    if (_.isFunction(parameters.listener)) {
+                        q.fcall(parameters.listener, message).then(function (result) {
 
-                        //TODO track completion of the message
+                            //TODO track completion of the message
 
-                        channels[parameters.messageType].channel.ack(msg);
-                    }).fail(function(error){
+                            channels[parameters.messageType].channel.ack(msg);
+                        }).fail(function (error) {
+                            handleConsumeError(error, msg, parameters);
+                        }).done();
+                    } else  {
+                        throw('Invalid listener on : ' + parameters.messageType);
+                    }
+                } catch(error) {
 
-                        //TODO track completion of the message in error
-
-                        //put the message in an error queue
-                        Queue.send('error', {error: error, originalMessage: msg, exchange: msg.fields.exchange, routingKey: msg.fields.routingKey});
-
-                        channels[parameters.messageType].channel.ack(msg);
-
-                    }).done();
-                } else if (_.isString(parameters.listener)) {
-
+                    handleConsumeError(error, msg, parameters);
                 }
             }));
         }
