@@ -63,9 +63,9 @@
     }
 
     function listen(parameters) {
-        var promises = parameters.promises;
+        var dfd = q.defer();
         if (!_.isUndefined(parameters.listener)) {
-            promises.push(parameters.channel.consume(parameters.messageType, function (msg) {
+            parameters.channel.consume(parameters.queueName, function (msg) {
                 try {
                     if (msg.content.length > 0) {
                         var obj = JSON.parse(msg.content.toString());
@@ -75,21 +75,23 @@
                     if (_.isFunction(parameters.listener)) {
                         q.fcall(parameters.listener, message).then(function (result) {
 
-                            //TODO track completion of the message
-
                             channels[parameters.messageType].channel.ack(msg);
                         }).fail(function (error) {
                             handleConsumeError(error, msg, parameters);
                         }).done();
-                    } else  {
+                    } else {
                         throw('Invalid listener on : ' + parameters.messageType);
                     }
-                } catch(error) {
+                } catch (error) {
 
                     handleConsumeError(error, msg, parameters);
                 }
-            }));
+
+            }).then(function () {
+                dfd.resolve();
+            });
         }
+        return dfd.promise;
     }
 
     function handleError(err) {
@@ -120,27 +122,31 @@
 
         var deferred = q.defer();
 
-        if(_.isUndefined(config) || _.isUndefined(config.connection)) {
+        if (_.isUndefined(config) || _.isUndefined(config.connection)) {
             deferred.resolve();
             return deferred.promise;
         }
+
+        var dfd = q.defer();
 
         qu.connect(config.connection.url).then(function (connection) {
             connected = true;
             connection.on('error', handleError);
 
-            var dfd = q.defer();
             var promises = [];
             process.nextTick(function () {
 
                 //create the error queue
                 var errorChannel = connection.createChannel();
                 promises.push(errorChannel);
-                errorChannel.then(function(ch) {
-                   channels['error'] = {channel: ch, persistent: true, routingKey: 'error'};
-                    promises.push(ch.assertExchange('error', 'topic'));
-                    promises.push(ch.assertQueue('errorQueue'));
-                    promises.push(ch.bindQueue('errorQueue', 'error', 'error'));
+                errorChannel.then(function (ch) {
+                    channels['error'] = {channel: ch, persistent: true, routingKey: 'error'};
+                    var ok = ch.assertExchange('error', 'topic');
+                    promises.push(ok);
+                    ok = ok.then(ch.assertQueue('errorQueue'));
+                    promises.push(ok);
+                    ok = ok.then(ch.bindQueue('errorQueue', 'error', 'error'));
+                    promises.push(ok);
                 });
 
                 for (var i = 0; i < config.types.length; i++) {
@@ -157,30 +163,45 @@
                             };
 
                             if (currentConfig.pattern == 'topic') {
-                                promises.push(ch.assertExchange(currentConfig.type, 'topic'));
-                                promises.push(ch.assertQueue(currentConfig.type));
-                                promises.push(ch.bindQueue(currentConfig.type, currentConfig.type, currentConfig.type));
-                                listen({
+                                ok = ok.then(ch.assertExchange(currentConfig.type, 'topic'));
+                                promises.push(ok);
+                                ok = ok.then(ch.assertQueue(currentConfig.type));
+                                promises.push(ok);
+                                ok = ok.then(ch.bindQueue(currentConfig.type, currentConfig.type, currentConfig.type));
+                                promises.push(ok);
+                                ok = ok.then(listen({
                                     messageType: currentConfig.type,
+                                    queueName: currentConfig.type,
                                     listener: currentConfig.listener,
-                                    promises: promises,
                                     channel: ch
-                                });
+                                }));
+                                promises.push(ok);
                             } else if (currentConfig.pattern == 'fanout') {
-                                promises.push(ch.assertExchange(currentConfig.type, 'fanout'));
+                                ok = ok.then(ch.assertExchange(currentConfig.type, 'fanout'));
+                                promises.push(ok);
                                 if (!_.isUndefined(currentConfig.listener)) {
-                                    promises.push(ch.assertQueue('', {
-                                        durable: false,
-                                        autoDelete: true
-                                    }).then(function (qq) {
-                                        ch.bindQueue(qq.name, currentConfig.type);
-                                        listen({
-                                            messageType: qq.name,
-                                            listener: currentConfig.listener,
-                                            promises: promises,
-                                            channel: ch
-                                        });
-                                    }));
+                                    var d = q.defer();
+                                    ok = ok.then(
+                                        ch.assertQueue('', {
+                                            durable: false,
+                                            autoDelete: true
+                                        }).then(function (qq) {
+                                            return ch.bindQueue(qq.queue, currentConfig.type).then(function () {
+                                                listen({
+                                                    messageType: currentConfig.type,
+                                                    queueName: qq.queue,
+                                                    listener: currentConfig.listener,
+                                                    channel: ch
+                                                }).then(function () {
+                                                    d.resolve();
+                                                });
+                                            })
+                                        }));
+
+                                    //});
+
+                                    promises.push(ok);
+                                    promises.push(d.promise);
                                 }
                             }
                         });
@@ -189,17 +210,19 @@
 
                 }
                 q.all(promises).then(function () {
+
                     dfd.resolve();
                 });
 
             });
-            return dfd.promise;
 
 
         }).then(function () {
-                if(config.startupHandler) {
-                    config.startupHandler(channels);
-                }
+                dfd.promise.then(function () {
+                    if (config.startupHandler) {
+                        config.startupHandler(channels);
+                    }
+                })
             },
             console.warn).done(function () {
                 deferred.resolve();

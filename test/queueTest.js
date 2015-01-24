@@ -16,29 +16,35 @@ module.exports = {
         var p = queue.setup({
             connection: {url: 'amqp://127.0.0.1?heartbeat=300'},
             startupHandler: function () {
+                queue.send('CustomerUpdated', {toto: 'hello'});
                 queue.send('CustomerUpdate', {toto: 'hello'});
             },
             types: [
                 {
+                    type: 'CustomerUpdated', pattern: 'fanout', listener: function (msg) {
+                    console.log('updated')
+                }
+                },
+                {
                     type: 'CustomerUpdate', pattern: 'topic', listener: function (msg) {
                     console.log("inner function");
                     console.log(msg);
-                    throw('test error');
                 }
-                },
-                {type: 'CustomerUpdated', pattern: 'fanout', listener: ''},
-                {type: 'CustomerCreated', pattern: 'fanout', listener: ''}
+                }
+
+                //,
+                //{type: 'CustomerCreated', pattern: 'fanout', listener: ''}
             ]
         });
 
         test.done();
     }/*,
-    testSendMessage: function (test) {
+     testSendMessage: function (test) {
 
-        var queue = require('../index.js');
+     var queue = require('../index.js');
 
-        queue.send('CustomerUpdate', {toto: 'hello'});
+     queue.send('CustomerUpdate', {toto: 'hello'});
 
-        test.done();
-    }*/
+     test.done();
+     }*/
 };
