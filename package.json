@@ -1,9 +1,10 @@
 {
   "name": "jsai-queuing",
   "version": "0.0.12",
-  "description" : "A wrapper to configure and launch queuing",
+  "description": "A wrapper to configure and launch queuing",
   "dependencies": {
     "amqplib": "^0.3.0",
+    "jsai-servicemessage": "0.0.8",
     "lodash": "^2.4.1",
     "q": "^1.1.2"
   },
@@ -18,5 +19,4 @@
   "engines": {
     "node": "*"
   }
-
 }
