@@ -14,17 +14,16 @@
 
     Queue.send = function (msgType, msg) {
 
-        var response = new serviceMessage.ServiceResponse();
-        var message = new serviceMessage.ServiceMessage();
+        var response = null;
+        var message = null;
 
         if (msg instanceof serviceMessage.ServiceMessage) {
-            response.correlationId = msg.correlationId;
-            message.correlationId = msg.correlationId;
-            message.data = msg.data;
+            response = msg.createServiceResponseFrom();
+            message = msg;
         } else {
-            message.data = msg;
+            message = new serviceMessage.ServiceMessage({data: msg});
             message.setCorrelationId();
-            response.correlationId = message.correlationId;
+            response = message.createServiceResponseFrom();
         }
 
         if (channels[msgType]) {
