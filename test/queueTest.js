@@ -18,6 +18,10 @@ module.exports = {
             startupHandler: function () {
                 queue.send('CustomerUpdated', {toto: 'hello'});
                 queue.send('CustomerUpdate', {toto: 'hello'});
+                queue.send('CustomerUpdate', {toto: 'hello'}, 5000);
+                queue.send('CustomerUpdate', {toto: 'hello'}, 7000);
+
+
             },
             types: [
                 {
@@ -26,7 +30,7 @@ module.exports = {
                 }
                 },
                 {
-                    type: 'CustomerUpdate', pattern: 'topic', listener: function (msg) {
+                    type: 'CustomerUpdate', pattern: 'topic', supportDelay: true, listener: function (msg) {
                     console.log("inner function");
                     console.log(msg);
                 }
@@ -43,7 +47,7 @@ module.exports = {
 
      var queue = require('../index.js');
 
-     queue.send('CustomerUpdate', {toto: 'hello'});
+     queue.send('CustomerUpdate', {toto: 'hello'}, 30000);
 
      test.done();
      }*/

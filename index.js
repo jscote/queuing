@@ -12,10 +12,11 @@
 
     }
 
-    Queue.send = function (msgType, msg) {
+    Queue.send = function (msgType, msg, withDelay) {
 
         var response = null;
         var message = null;
+        withDelay = withDelay || -1;
 
         if (msg instanceof serviceMessage.ServiceMessage) {
             response = msg.createServiceResponseFrom();
@@ -30,7 +31,14 @@
             try {
                 var str = JSON.stringify(message.toJSON());
 
-                response.isSuccess = channels[msgType].channel.publish(msgType, channels[msgType].routingKey, new Buffer(str), {persistent: channels[msgType].persistent});
+                if (withDelay < 1) {
+                    response.isSuccess = channels[msgType].channel.publish(msgType, channels[msgType].routingKey, new Buffer(str), {persistent: channels[msgType].persistent});
+                } else {
+                    response.isSuccess = channels[msgType].channel.publish(msgType + "-delayed", channels[msgType].routingKey, new Buffer(str), {
+                        persistent: channels[msgType].persistent,
+                        headers: {'x-delay': withDelay}
+                    });
+                }
                 if (!response.isSuccess) {
                     response.errors.push('The message could not be sent');
                 }
@@ -162,12 +170,23 @@
                             };
 
                             if (currentConfig.pattern == 'topic') {
-                                ok = ok.then(ch.assertExchange(currentConfig.type, 'topic'));
+                                ok = ok.then(ch.assertExchange(currentConfig.type, 'topic', {durable: true}));
                                 promises.push(ok);
+                                if (currentConfig.supportDelay == true) {
+                                    ok = ok.then(ch.assertExchange(currentConfig.type + "-delayed", "x-delayed-message", {
+                                        durable: true,
+                                        arguments: {'x-delayed-type': 'topic'}
+                                    }));
+                                    promises.push(ok);
+                                }
                                 ok = ok.then(ch.assertQueue(currentConfig.type));
                                 promises.push(ok);
                                 ok = ok.then(ch.bindQueue(currentConfig.type, currentConfig.type, currentConfig.type));
                                 promises.push(ok);
+                                if (currentConfig.supportDelay == true) {
+                                    ok = ok.then(ch.bindQueue(currentConfig.type, currentConfig.type + "-delayed", currentConfig.type));
+                                    promises.push(ok);
+                                }
                                 ok = ok.then(listen({
                                     messageType: currentConfig.type,
                                     queueName: currentConfig.type,
