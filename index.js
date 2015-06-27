@@ -12,6 +12,20 @@
 
     }
 
+    function getRoutingKey(rouingKeyPrefix, routingKeyBody) {
+        if(!_.isUndefined(routingKeyPrefix) && !_.isUndefined(routingKeyBody)) {
+            return routingKeyPrefix + '.' + routingKeyBody;
+        }
+        return routingKeyBody;
+    }
+
+    function getRoutingKeyFromChannel(channel) {
+        if(!_.isUndefined(channel) && !_.isNull(channel)) {
+            return getRoutingKey(channel.routingKeyPrefix, channel.routingKey);
+        }
+        throw Error('Channel is not defined');
+    }
+
     Queue.send = function (msgType, msg, withDelay) {
 
         var response = null;
@@ -32,12 +46,15 @@
                 var str = JSON.stringify(message.toJSON());
 
                 if (withDelay < 1) {
-                    response.isSuccess = channels[msgType].channel.publish(msgType, channels[msgType].routingKey, new Buffer(str), {persistent: channels[msgType].persistent});
+                    response.isSuccess = channels[msgType].channel.publish(msgType,
+                        getRoutingKeyFromChannel(channels[msgType]),
+                        new Buffer(str), {persistent: channels[msgType].persistent});
                 } else {
-                    response.isSuccess = channels[msgType].channel.publish(msgType + "-delayed", channels[msgType].routingKey, new Buffer(str), {
-                        persistent: channels[msgType].persistent,
-                        headers: {'x-delay': withDelay}
-                    });
+                    response.isSuccess = channels[msgType].channel.publish(msgType + "-delayed",
+                        getRoutingKeyFromChannel(channels[msgType]), new Buffer(str), {
+                            persistent: channels[msgType].persistent,
+                            headers: {'x-delay': withDelay}
+                        });
                 }
                 if (!response.isSuccess) {
                     response.errors.push('The message could not be sent');
@@ -166,12 +183,14 @@
                             channels[currentConfig.type] = {
                                 channel: ch,
                                 persistent: currentConfig.pattern == 'topic',
-                                routingKey: currentConfig.pattern == 'topic' ? currentConfig.type : ''
+                                routingKeyPrefix: currentConfig.pattern == 'durableEvent' ? 'all' : undefined,
+                                routingKey: (currentConfig.pattern == 'topic' || currentConfig.pattern == 'durableEvent') ? currentConfig.type : ''
                             };
 
-                            if (currentConfig.pattern == 'topic') {
+                            if (currentConfig.pattern == 'topic' || currentConfig.pattern == 'durableEvent') {
                                 ok = ok.then(ch.assertExchange(currentConfig.type, 'topic', {durable: true}));
                                 promises.push(ok);
+
                                 if (currentConfig.supportDelay == true) {
                                     ok = ok.then(ch.assertExchange(currentConfig.type + "-delayed", "x-delayed-message", {
                                         durable: true,
@@ -179,21 +198,38 @@
                                     }));
                                     promises.push(ok);
                                 }
-                                ok = ok.then(ch.assertQueue(currentConfig.type));
-                                promises.push(ok);
-                                ok = ok.then(ch.bindQueue(currentConfig.type, currentConfig.type, currentConfig.type));
-                                promises.push(ok);
-                                if (currentConfig.supportDelay == true) {
-                                    ok = ok.then(ch.bindQueue(currentConfig.type, currentConfig.type + "-delayed", currentConfig.type));
+
+                                if(!_.isUndefined(currentConfig.listener)) {
+                                    var queueName = currentConfig.type;
+                                    var routingKey = currentConfig.type;
+
+                                    if (currentConfig.pattern == 'durableEvent') {
+                                        queueName = (currentConfig.serviceName || 'unknownn') + '_' + queueName;
+                                        routingKey = '*.' + currentConfig.type;
+                                    }
+
+
+                                    ok = ok.then(ch.assertQueue(queueName));
+                                    promises.push(ok);
+
+                                    //bind the queue
+                                    ok = ok.then(ch.bindQueue(queueName, currentConfig.type, routingKey));
+                                    promises.push(ok);
+
+                                    if (currentConfig.supportDelay == true) {
+                                        //if there is a delayed exchange, add another binding to the queue for it
+                                        ok = ok.then(ch.bindQueue(queueName, currentConfig.type + "-delayed", routingKey));
+                                        promises.push(ok);
+                                    }
+                                    ok = ok.then(listen({
+                                        messageType: currentConfig.type,
+                                        queueName: queueName,
+                                        listener: currentConfig.listener,
+                                        channel: ch
+                                    }));
                                     promises.push(ok);
                                 }
-                                ok = ok.then(listen({
-                                    messageType: currentConfig.type,
-                                    queueName: currentConfig.type,
-                                    listener: currentConfig.listener,
-                                    channel: ch
-                                }));
-                                promises.push(ok);
+
                             } else if (currentConfig.pattern == 'fanout') {
                                 ok = ok.then(ch.assertExchange(currentConfig.type, 'fanout'));
                                 promises.push(ok);
