@@ -12,7 +12,7 @@
 
     }
 
-    function getRoutingKey(rouingKeyPrefix, routingKeyBody) {
+    function getRoutingKey(routingKeyPrefix, routingKeyBody) {
         if(!_.isUndefined(routingKeyPrefix) && !_.isUndefined(routingKeyBody)) {
             return routingKeyPrefix + '.' + routingKeyBody;
         }
